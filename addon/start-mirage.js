@@ -32,8 +32,10 @@ export default function startMirage(owner, { env, baseConfig, testConfig } = {})
   let mirageEnvironment = env['ember-cli-mirage'] || {};
   let discoverEmberDataModels = mirageEnvironment.discoverEmberDataModels;
   if (discoverEmberDataModels === undefined) { discoverEmberDataModels = true; }
+  let discoverEmberDataSerializers = mirageEnvironment.discoverEmberDataSerializers;
+  if (discoverEmberDataSerializers === undefined) { discoverEmberDataSerializers = true; }
   let modules = readModules(env.modulePrefix);
-  let options = Object.assign(modules, {environment, baseConfig, testConfig, discoverEmberDataModels});
+  let options = Object.assign(modules, {environment, baseConfig, testConfig, discoverEmberDataModels, discoverEmberDataSerializers});
   options.trackRequests = mirageEnvironment.trackRequests;
   options.inflector = { singularize, pluralize };
 
