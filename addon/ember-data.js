@@ -54,6 +54,25 @@ export function getDsModels() {
 }
 
 /**
+ *
+ * This will discover all of the ember data models and merge them with the mirage models with
+ * the mirage models overriding the ember data ones.
+ *
+ * @method discoverEmberDataModels
+ * @param mirageModels - the mirage models
+ * @returns models - all the mirage models merged with the discovered ember data models
+ */
+export function discoverEmberDataModels(mirageModels) {
+  let models;
+
+  if (hasEmberData) {
+    models = Object.assign({}, getModels(), mirageModels);
+  }
+
+  return models || mirageModels;
+}
+
+/**
  * Get all mirage models for each of the ember-data models
  *
  * @method getModels

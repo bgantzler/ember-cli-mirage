@@ -16,7 +16,7 @@ import { singularize, pluralize } from 'ember-inflector';
 
   @hide
 */
-export default function startMirage(owner, { env, baseConfig, testConfig } = {}) {
+export default function startMirage(owner, { env, baseConfig, testConfig, makeServer } = {}) {
   if (!env || !baseConfig) {
     if (!owner) {
       throw new Error('You must pass `owner` to startMirage()');
@@ -26,6 +26,7 @@ export default function startMirage(owner, { env, baseConfig, testConfig } = {})
     // These are set from `<app>/initializers/ember-cli-mirage`
     baseConfig = baseConfig || resolveRegistration(owner, 'mirage:base-config');
     testConfig = testConfig || resolveRegistration(owner, 'mirage:test-config');
+    makeServer = makeServer || resolveRegistration(owner, 'mirage:make-server');
   }
 
   let environment = env.environment;
@@ -37,7 +38,18 @@ export default function startMirage(owner, { env, baseConfig, testConfig } = {})
   options.trackRequests = mirageEnvironment.trackRequests;
   options.inflector = { singularize, pluralize };
 
-  return new Server(options);
+  let server;
+  if (makeServer) {
+    // Which are we suppose to use? baseConfig or routes
+    options.routes = options.baseConfig;
+    delete options.baseConfig;
+    delete options.discoverEmberDataModels;
+    server = makeServer(options);
+  } else {
+    server = new Server(options);
+  }
+
+  return server;
 }
 
 // Support Ember 1.13
