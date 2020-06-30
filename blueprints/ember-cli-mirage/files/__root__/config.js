@@ -1,9 +1,9 @@
 import { createServer } from 'miragejs';
-import { discoverEmberDataModels } from 'ember-cli-mirage';
+import { mergeEmberDataModels } from 'ember-cli-mirage';
 
 export function makeServer(config) {
   let finalConfig = { ...config };
-  finalConfig.models = discoverEmberDataModels(config.models);
+  finalConfig.models = mergeEmberDataModels(config.models);
 
   return createServer(finalConfig);
 }
